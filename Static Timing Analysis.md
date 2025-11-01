@@ -202,13 +202,99 @@ Positive Skew:
 - Capture flop latency is greater than the launch flop latency. 
 
 Negative Skew: 
--- Capture flop latency is lesser than the launch flop latency.
+- Capture flop latency is lesser than the launch flop latency.
 
 ## Local and Global Skew
 
 Local Skew: 
-- The difference in clock arrival time of two related flops is called local skew. 
+- The difference in clock arrival time of two related flops is called local skew.
+
 Global Skew: 
 - The difference of maximum latency and minimum latency in the design between two 
 non-related flops is called the global skew
 
+## Clock Uncertainity
+
+- In practice no clock source could be so ideal that it is free from jitter, there is always 
+some variation in clock period in the source of clock itself.
+
+- Ideally source clock:
+
+There is always some skew in a clock tree, so launch and capture flop will get the clock edge at 
+different point of time. 
+
+Clock tree may suffer from many variations (like: Crosstalk, IR, Process Variation etc) which 
+can affect the clock tree delay of individual clock paths. These variations may vary the clock 
+edge arrival time at sink pin.
+
+## Factors we should take care about clock uncertainty
+
+PreCTS Stage: 
+```
+• Setup Uncertainty: Jitter + Skew + Setup Margin 
+• Hold Uncertainty: Skew + Hold Margin
+```
+
+PostCTS Stage: 
+```
+• Setup Uncertainty: Jitter + Setup Margin 
+• Hold Uncertainty: Hold Margin
+```
+Set Clock Uncertainty (How to define clock uncertainty): 
+
+- set_clock_uncertainty 
+```
+set_clock_uncertainty -setup 0.15 [get_clock clk_core] 
+set_clock_uncertainty -hold 0.05 [get_clock clk_core]
+```
+
+- Setup analysis (AAT <RAT):
+```
+Required Arrival Time = T + Skew – Setup Uncertainty – Setup 
+Required Arrival Time = 1000ps +100ps – 150ps – 30ps
+```
+```
+Hold analysis (AAT > RAT): 
+Required Arrival Time = Hold Time + Skew + Hold Uncertainty 
+Required Arrival Time = 20ps +100ps +50ps
+```
+
+## LATCH AND FLIP FLOP Latch and Flip Flop
+
+Latch: 
+
+Flip Flop: 
+
+Latch and Flip Flop in Transistor Level:
+
+Functions of Latch:
+
+Latch Operation Table
+
+| Level | Latch Type | Q Behavior | State | Description | Previous Stage |
+|:------|:------------|:-----------|:-------|:-------------|:----------------|
+| High  | Transparent | Q = D | Transparent | Output follows input | D |
+| Low   | Opaque | Q holds previous value | Latched | Output is held constant | Previous Stage |
+
+Functions of Flip Flop:
+
+| **Properties** | **Latch** | **Flip-Flop** |
+|:----------------|:-----------|:---------------|
+| **Transistor Counts** | Less | More (approximately double) |
+| **Propagation Delay** | Less | More |
+| **Operation** | Works on **level** of clock | Works on **edge** of clock |
+| **Types** | Positive / Negative **level** sensitive | Positive / Negative **edge** sensitive |
+| **Process Variation Sensitivity** | Less prone to process variation | More prone to process variation |
+| **Use** | Used as a **lockup latch** and in **high-speed ASICs** | Commonly used in **registers** |
+
+## Setup & Hold Time Requirement inside Latch 
+
+Internal Structure & Operation:
+
+Need of Internal Setup & Hold Timings:
+
+## CPPR: Common Path Pessimism Removal
+
+Common Clock Path: 
+
+Common Path Pessimism:
